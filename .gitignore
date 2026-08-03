@@ -1,0 +1,12 @@
+# Frontend 
+task-management-system-frontend/node_modules 
+task-management-system-frontend/dist 
+task-management-system-frontend/.vite 
+ 
+# Backend 
+target/ 
+.mvn/wrapper/maven-wrapper.jar 
+ 
+# General 
+.env 
+*.log 
