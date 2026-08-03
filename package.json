@@ -1,0 +1,12 @@
+{
+  "name": "task-management-system-root",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "npm run dev --prefix task-manamegent-system",
+    "build": "npm run build --prefix task-manamegent-system",
+    "preview": "npm run preview --prefix task-manamegent-system"
+  },
+  "dependencies": {
+    "react-toastify": "^11.0.5"
+  }
+}
