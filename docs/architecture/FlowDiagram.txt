@@ -1,0 +1,51 @@
+[ Developer ] ──► Git Push ──► [ GITHUB ACTIONS (CI PIPELINE) ]
+                                      │
+                                      ├─► 1. Code: GitLeaks ──► Maven Compile ──► SonarQube
+                                      ├─► 2. Supply Chain: Trivy FS ──► OWASP Dependency-Check ──► SBOM
+                                      ├─► 3. IaC: Checkov ──► Terraform Apply
+                                      └─► 4. Package: Docker Build ──► Trivy Image Scan ──► Sonatype Nexus
+                                                                                               │
+┌──────────────────────────────────────────────────────────────────────────────────────────────┼──────────────────────────────┐
+│  AWS CLOUD / VIRTUAL PRIVATE CLOUD (VPC)                                                     │                              │
+│                                                                                              │                              │
+│  ┌────────────────────────────────────────────────────────────────────────────────────────┐  │                              │
+│  │ PUBLIC SUBNETS (Internet-Facing)                                                        │  │                              │
+│  │                                                                                        │  │                              │
+│  │  [ Public Application Load Balancer (ALB) ]                                            │  │                              │
+│  │         │                                                                              │  │                              │
+│  │         ▼ Route Traffic                                                                │  │                              │
+│  │  [ Nginx Reverse Proxy / Ingress Controller Pods ]                                     │  │                              │
+│  └─────────┼──────────────────────────────────────────────────────────────────────────────┘  │                              │
+│            │                                                                                 │                              │
+│            ▼ Cross-Subnet Communication                                                      │                              │
+│  ┌─────────┼──────────────────────────────────────────────────────────────────────────────┘  │                              │
+│  │ PRIVATE SUBNETS (Isolated Internal Network)                                               │                              │
+│  │                                                                                           │                              │
+│  │   AWS EKS CLUSTER                                                                         │                              │
+│  │  ┌─────────────────────────────────────────────────────────────────────────────────────┐  │                              │
+│  │  │                                                                                     │  │                              │
+│  │  │  [ ArgoCD Operator ] ◄──────────────────────────────────────────────────────────────┘  │ (Pulls Image Tag Update)     │
+│  │  │         │ (Sync Deployments)                                                        │                                 │
+│  │  │         ▼                                                                           │                                 │
+│  │  │  [ Spring Boot Microservice Pods ] ◄── Inject Secrets ── [ HashiCorp Vault Pod ]     │                                 │
+│  │  │         │                                                                           │                                 │
+│  │  │         ▼ Validated by                                                              │                                 │
+│  │  │  [ Kubernetes RBAC / IAM Roles for Service Accounts (IRSA) ]                       │                                 │
+│  │  │                                                                                     │                                 │
+│  │  └─────────────────────────────────────────────────────────────────────────────────────┘                                 │
+│  │                                                                                           │                              │
+│  └───────────────────────────────────────────────────────────────────────────────────────────┘                              │
+└─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+                                                              │
+                                                              ▼ Dynamic Post-Deploy Test
+                                                   [ OWASP ZAP Scanner Container ]
+								│
+                                                                ▼
+						 ELK [Elasticsearch Logstash Kibana]
+
+
+
+
+ADDITION 
+
+email notification/alert
