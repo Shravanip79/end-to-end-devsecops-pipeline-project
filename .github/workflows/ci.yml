@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build-backend:
@@ -43,7 +44,7 @@ jobs:
 
       - name: SonarQube Scan
         run: |
-          ./mvnw sonar:sonar \
+          ./mvnw clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=end-to-end-devsecops-pipeline-project \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
