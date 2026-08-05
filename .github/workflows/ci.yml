@@ -28,8 +28,22 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
       - name: Grant execute permission to Maven Wrapper
         run: chmod +x mvnw
 
       - name: Build Spring Boot Application
         run: ./mvnw clean package -DskipTests
+
+      - name: SonarQube Scan
+        run: |
+          ./mvnw sonar:sonar \
+            -Dsonar.projectKey=end-to-end-devsecops-pipeline-project \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
