@@ -71,6 +71,6 @@ jobs:
         run: |
           ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -DskipTests \
-            -Dsonar.projectKey=end-to-end-devsecops-pipeline-project \
+            -Dsonar.projectKey=DevSecOps-pipeline \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
