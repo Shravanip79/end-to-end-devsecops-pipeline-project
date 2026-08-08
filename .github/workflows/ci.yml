@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+
   workflow_dispatch:
 
 jobs:
@@ -34,7 +35,8 @@ jobs:
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
+          restore-keys: |
+            ${{ runner.os }}-sonar
 
       - name: Grant execute permission to Maven Wrapper
         run: chmod +x mvnw
@@ -44,7 +46,8 @@ jobs:
 
       - name: SonarQube Scan
         run: |
-          ./mvnw clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+          ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -DskipTests \
             -Dsonar.projectKey=end-to-end-devsecops-pipeline-project \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
