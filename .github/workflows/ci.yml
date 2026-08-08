@@ -44,11 +44,29 @@ jobs:
       - name: Build Spring Boot Application
         run: ./mvnw clean package -DskipTests
 
-
       - name: Test SonarQube Connectivity
         run: |
           curl -v "${{ secrets.SONAR_HOST_URL }}/api/system/status"
-          
+
+      - name: Verify SonarQube Authentication
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          response=$(curl -s \
+            -o /tmp/sonar-auth-response.txt \
+            -w "%{http_code}" \
+            -H "Authorization: Bearer ${SONAR_TOKEN}" \
+            "${SONAR_HOST_URL}/api/authentication/validate")
+
+          echo "HTTP status: $response"
+          cat /tmp/sonar-auth-response.txt
+
+          if [ "$response" != "200" ]; then
+            echo "SonarQube authentication failed."
+            exit 1
+          fi
+
       - name: SonarQube Scan
         run: |
           ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
