@@ -44,6 +44,11 @@ jobs:
       - name: Build Spring Boot Application
         run: ./mvnw clean package -DskipTests
 
+
+      - name: Test SonarQube Connectivity
+        run: |
+          curl -v "${{ secrets.SONAR_HOST_URL }}/api/system/status"
+          
       - name: SonarQube Scan
         run: |
           ./mvnw org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
